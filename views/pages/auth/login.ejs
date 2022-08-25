@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("../../partials/head.ejs") %>
+  <body>
+    <%- include("../../partials/header.ejs",{user: user}) %>
+
+    <main class="p-5">
+      <% if (message) { %> <% if (message == "success") { %>
+
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Registeration successful </strong>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      
+
+        <% } else if (message == "invalid") { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error: </strong>
+            Username or password do not match
+            <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+            <% }
+        else { %> 
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error: </strong>
+            Unknown error occured 
+            <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+            <% } %>
+
+
+      <% } %>
+      <form class="bg-primary text-light p-3" method="post">
+        <h1 class="text-center">Login</h1>
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            placeholder="Enter username"
+            name="username"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            placeholder="Enter password"
+            name="password"
+          />
+        </div>
+        <button type="submit" class="btn btn-light">Login</button>
+        <p>
+          Not registered? click
+          <a class="text-dark" href="/auth/register">here</a> to register
+        </p>
+      </form>
+    </main>
+
+    <%- include("../../partials/footer.ejs") %>
+  </body>
+</html>
