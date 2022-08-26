@@ -1,58 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-    <%- include("./partials/head.ejs", {user: user}) %> 
+    <%- include("./partials/head.ejs", {user: user, title: "Home | "+ user.username}) %> 
 <body>
     <%- include("./partials/header.ejs") %> 
+    <% if (message) { %>
+      <% if (message == "postCreated") { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Post created successful.</strong>
+         
     
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% } else if (message == "postDeleted") { %>
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Post deleted successful.</strong>
+           
+      
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+      <% } %>
+    <% } %>
     <main class="p-2">
+       <% posts.forEach(post => { %>
         <div class="container my-3 my-lg-4">
-            <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-header">
-                          Username
-                        </div>
-                        <div class="card-body">
-                          <h5 class="card-title">Post title</h5>
-                          <p class="card-text">Post text</p>
-                          <a href="#" class="btn btn-primary">View</a>
-                        </div>
+          <div class="row">
+              <div class="col">
+                  <div class="card">
+                      <div class="card-header">
+                        <%= post.owner.username %> 
                       </div>
-                </div>
-            </div>
-        </div>
-        <div class="container my-3 my-lg-4">
-            <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-header">
-                          Username
-                        </div>
-                        <div class="card-body">
-                          <h5 class="card-title">Post title</h5>
-                          <p class="card-text">Post text</p>
-                          <a href="#" class="btn btn-primary">View</a>
-                        </div>
+                      <div class="card-body">
+                        <h5 class="card-title"><%= post.title %> </h5>
+                        <p class="card-text"><%= post.body %> </p>
+                        <a href="/post/view-post/<%= post.id %>" class="btn btn-primary">View</a>
                       </div>
-                </div>
-            </div>
-        </div>
-        <div class="container my-3 my-lg-4">
-            <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-header">
-                          Username
-                        </div>
-                        <div class="card-body">
-                          <h5 class="card-title">Post title</h5>
-                          <p class="card-text">Post text</p>
-                          <a href="#" class="btn btn-primary">View</a>
-                        </div>
-                      </div>
-                </div>
-            </div>
-        </div>
+                    </div>
+              </div>
+          </div>
+      </div>
+       <% }) %>
+ 
     </main>
 
     <%- include("./partials/footer.ejs") %> 

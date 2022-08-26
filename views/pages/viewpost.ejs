@@ -1,25 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<%- include("../partials/head.ejs")  %> 
+<%- include("../partials/head.ejs", {title: post.title})  %> 
 <body>
 <%- include("../partials/header.ejs",{user: user})  %> 
 
 <main class="p-5">
-
+    <% if (message) { %>
+     <% if (message == "postUpdated") { %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Post Update successful.</strong>
+       
+  
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+  
+     <% } else if (message == "commentRemoved") { %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Comment delete successful.</strong>
+       
+  
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <% } else if (message == "commentAdded") { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Comment Added successfully.</strong>
+         
+    
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% } else { %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error: <%= message %> </strong>
+           
+      
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+    <% } %>
+    <% } %>
     <section class="container mt-5 pt-5">
         <div class="card">
             <div class="card-body">
-              <h6 class="card-subtitle mb-2 text-muted">2020-11-02</h6>
-              <h5 class="card-title"> shedrack </h5>
-              <h6 class="card-subtitle mb-2 text-muted">post title</h6>
+              <!-- <h6 class="card-subtitle mb-2 text-muted">2020-11-02</h6> -->
+              <h5 class="card-title"> <%= post.owner.username %>  </h5>
+              <h6 class="card-subtitle mb-2 text-muted"><%= post.title %> </h6>
               
-              <p class="card-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nihil dolore sunt provident possimus officia, cumque deserunt ipsam inventore iusto eaque.</p>
+              <p class="card-text"><%= post.body %> </p>
     
              
-                 <a href="/editpost/" class="card-link text-warning">Edit</a>
-                <a href="/deletepost/" class="card-link text-danger">Delete</a>
-             
+                <% if (user) { %>
+                 <% if (user._id === post.owner.id) { %>
+                  <a href="/post/edit-post/<%= post.id %> " class="card-link text-warning">Edit</a>
+                  <a href="/post/delete-post/<%= post.id %> " class="card-link text-danger">Delete</a>
+                 <% } %>
+                <% } %>
+            
              
               
             
@@ -30,29 +65,37 @@
     
     <section class="container mt-5">
  
-        <form action="/addcomment " method="post">
+      <% if (user) { %>
+        <form action="/post/add-comment/<%= post.id %>  " method="post">
           <textarea name="body" id="" cols="10" rows="2"></textarea> <br>
           <button class="btn btn-dark" type="submit">Add</button>
       </form>
+      <% } %>
 
-      <h1>comments (1)</h1>
+      <h1>comments (<%= post.comments.length %> )</h1>
     
 
-      <div class="card mt-5 mb-5" style="width: 18rem;">
-        <div class="card-body">
-          <h6 class="card-subtitle mb-2 text-muted">2020-11-02 </h6>
-          <h5 class="card-title">Shedrack </h5>
-       
-          <p class="card-text">Nice post</p>
-        
-            <a href="/deletecomment" class="card-link text-danger">Delete</a>
-            
-     
+      <% post.comments.forEach(comment => { %>
+        <div class="card mt-5 mb-5" style="width: 18rem;">
+          <div class="card-body">
+            <!-- <h6 class="card-subtitle mb-2 text-muted">2020-11-02 </h6> -->
+            <h5 class="card-title"><%= comment.owner.username %>  </h5>
+         
+            <p class="card-text"><%= comment.body %> </p>
           
-        
-        
+              <% if (user) { %>
+               <% if (user._id === comment.owner.id) { %>
+                <a href="/post/delete-comment/<%= post.id %>/<%= comment.id %>  " class="card-link text-danger">Delete</a>
+               <% } %>
+              <% } %>
+              
+       
+            
+          
+          
+          </div>
         </div>
-      </div>
+      <% }) %>
 
     
     
@@ -61,6 +104,6 @@
 
 <%- include("../partials/footer.ejs")  %> 
 
-    
+    <script src="/js/bootstrap.bundle.js"></script>
 </body>
 </html>
